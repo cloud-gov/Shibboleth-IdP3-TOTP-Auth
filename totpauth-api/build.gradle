@@ -1,7 +1,7 @@
 
 description = 'totpauth-api'
 dependencies {
-    testCompile group: 'junit', name: 'junit', version:'3.8.1'
+    testImplementation group: 'junit', name: 'junit', version:'3.8.1'
 }
 
 task packageTests(type: Jar) {
