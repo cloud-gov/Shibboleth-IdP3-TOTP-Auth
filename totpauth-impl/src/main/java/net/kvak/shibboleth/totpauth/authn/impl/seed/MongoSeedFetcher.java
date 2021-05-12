@@ -43,7 +43,7 @@ public class MongoSeedFetcher implements SeedFetcher {
 				tokenUserCtx.setTokenSeed(user.getTokenSeed());
 			} catch (Exception e) {
 				log.debug("Aaaaand we got an error");
-				log.debug("Mongo Failed", e);
+				log.error("Mongo Failed", e);
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

@@ -64,7 +64,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 					.getSubcontext(UsernamePasswordContext.class);
 			return true;
 		} catch (Exception e) {
-			log.debug("Error with doPreExecute", e);
+			log.error("Error with doPreExecute", e);
 			return false;
 
 		}
@@ -79,7 +79,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 			log.debug("Trying to create new token for {}", upCtx.getUsername());
 			generateToken();
 		} catch (Exception e) {
-			log.debug("Failed to create new token", e);
+			log.error("Failed to create new token", e);
 		}
 
 	}
@@ -99,7 +99,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 			tokenCtx.setSharedSecret(sharedSecret);
 
 		} catch (Exception e) {
-			log.debug("Error generating new token",e);
+			log.error("Error generating new token",e);
 		}
 
 

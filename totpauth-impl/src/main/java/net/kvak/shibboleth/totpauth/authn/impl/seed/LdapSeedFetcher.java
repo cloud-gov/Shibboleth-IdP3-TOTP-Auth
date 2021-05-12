@@ -60,7 +60,7 @@ public class LdapSeedFetcher implements SeedFetcher {
 			}
 		} catch (Exception e) {
 			tokenUserCtx.setState(AuthState.MISSING_SEED);
-			log.debug("Encountered problems with LDAP", e);
+			log.error("Encountered problems with LDAP", e);
 		}
 
 	}
@@ -83,7 +83,7 @@ public class LdapSeedFetcher implements SeedFetcher {
 			}
 			
 		} catch (Exception e) {
-			log.debug("Error with getAllTokenCodes", e);
+			log.error("Error with getAllTokenCodes", e);
 		}
 		
 		return tokenList;

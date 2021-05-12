@@ -125,7 +125,7 @@ public class RegisterNewToken extends AbstractProfileAction {
 					.getSubcontext(UsernamePasswordContext.class);
 			return true;
 		} catch (Exception e) {
-			log.debug("Error with doPreExecute", e);
+			log.error("Error with doPreExecute", e);
 			return false;
 
 		}
@@ -139,7 +139,7 @@ public class RegisterNewToken extends AbstractProfileAction {
 		final TotpUtils totpUtils = new TotpUtils();
 
 		if (request == null) {
-			log.debug("{} Empty request", getLogPrefix());
+			log.error("{} Empty request", getLogPrefix());
 			ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.NO_CREDENTIALS);
 			return;
 		}
@@ -188,7 +188,7 @@ public class RegisterNewToken extends AbstractProfileAction {
 			ldapTemplate.modifyAttributes(dn, new ModificationItem[] { item });
 			return true;
 		} catch (Exception e) {
-			log.debug("{} registerToken error", getLogPrefix(), e);
+			log.error("{} registerToken error", getLogPrefix(), e);
 			return false;
 		}
 
