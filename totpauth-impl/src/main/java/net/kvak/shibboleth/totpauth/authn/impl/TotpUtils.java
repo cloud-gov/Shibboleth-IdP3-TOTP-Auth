@@ -63,7 +63,7 @@ public class TotpUtils {
 			log.debug("{} User {} relative DN is: {}", username, (String) result.get(0));
 			dn = (String) result.get(0);
 		} else {
-			log.debug("{} User not found or not unique. DN size: {}", result.size());
+			log.warn("{} User not found or not unique. DN size: {}", result.size());
 			throw new RuntimeException("User not found or not unique");
 		}
 

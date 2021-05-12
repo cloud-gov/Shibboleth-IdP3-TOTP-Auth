@@ -131,7 +131,7 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
 					.getSubcontext(UsernamePasswordContext.class);
 			return true;
 		} catch (Exception e) {
-			log.debug("Error with doPreExecute", e);
+			log.error("Error with doPreExecute", e);
 			return false;
 
 		}
@@ -188,7 +188,7 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
         		new Object[] { username },
         		String.class);
 		} catch (Exception e) {
-			log.debug("existing seed not found");
+			log.error("existing seed not found");
 			existingSeed = null;
 		}
 
@@ -204,7 +204,7 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
         		username, sharedSecret);
 			return true;
 		} catch (Exception e) {
-			log.debug("{} registerSeer error", getLogPrefix(), e);
+			log.error("{} registerSeer error", getLogPrefix(), e);
 			return false;
 		}
 

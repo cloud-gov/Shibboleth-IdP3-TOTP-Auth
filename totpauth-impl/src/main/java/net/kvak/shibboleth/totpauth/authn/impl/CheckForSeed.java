@@ -57,7 +57,7 @@ public class CheckForSeed extends AbstractProfileAction {
 					.getSubcontext(UsernamePasswordContext.class);
 			return true;
 		} catch (Exception e) {
-			log.debug("Error with doPreExecute", e);
+			log.error("Error with doPreExecute", e);
 			return false;
 
 		}
