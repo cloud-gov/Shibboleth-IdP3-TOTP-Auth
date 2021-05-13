@@ -9,6 +9,9 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.base.Strings;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
@@ -20,12 +23,8 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.filter.EqualsFilter;
 
-import com.google.common.base.Strings;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
-
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext;
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext.AuthState;
-import net.kvak.shibboleth.totpauth.authn.impl.TotpUtils;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.UsernamePasswordContext;
@@ -119,8 +118,8 @@ public class RegisterNewToken extends AbstractProfileAction {
 		log.debug("Entering GenerateNewToken doPreExecute");
 
 		try {
-			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(TokenUserContext.class, true);
+			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class).getSubcontext(TokenUserContext.class,
+					true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(UsernamePasswordContext.class);
 			return true;
