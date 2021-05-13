@@ -2,17 +2,15 @@ package net.kvak.shibboleth.totpauth.authn.impl.seed;
 
 import javax.annotation.Nonnull;
 
-import net.kvak.shibboleth.totpauth.api.authn.SeedFetcher;
-import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext;
-import org.springframework.jdbc.core.JdbcTemplate;
 import com.google.common.base.Strings;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import net.kvak.shibboleth.totpauth.api.authn.SeedFetcher;
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext;
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext.AuthState;
-import net.kvak.shibboleth.totpauth.authn.impl.TotpUtils;
-import net.shibboleth.idp.authn.AuthnEventIds;
-import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 
 public class SQLSeedFetcher implements SeedFetcher {
@@ -38,7 +36,7 @@ public class SQLSeedFetcher implements SeedFetcher {
 
 	/** JdbcTemplate **/
 	@Nonnull
- 	@NotEmpty
+	@NotEmpty
 	private JdbcTemplate jdbcTemplate;
 
 	/** Inject JDBC Template */
@@ -57,11 +55,9 @@ public class SQLSeedFetcher implements SeedFetcher {
 	public void getSeed(String username, TokenUserContext tokenUserCtx) {
 
 		try {
-			String querysql = "SELECT " + seedColumnName + " FROM " + seedDbTableName + " WHERE " + usernameColumnName + " = ?";
-			String seed = jdbcTemplate.queryForObject(
-        		querysql,
-        		new Object[] { username },
-        		String.class);
+			String querysql = "SELECT " + seedColumnName + " FROM " + seedDbTableName + " WHERE " + usernameColumnName
+					+ " = ?";
+			String seed = jdbcTemplate.queryForObject(querysql, new Object[] { username }, String.class);
 
 			if (Strings.isNullOrEmpty(seed)) {
 				tokenUserCtx.setState(AuthState.REGISTER);
