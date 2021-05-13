@@ -1,29 +1,20 @@
 package net.kvak.shibboleth.totpauth.authn.impl;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.ModificationItem;
 import javax.servlet.http.HttpServletRequest;
 
-import javax.sql.DataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.google.common.base.Strings;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext;
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext.AuthState;
-import net.kvak.shibboleth.totpauth.authn.impl.TotpUtils;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.UsernamePasswordContext;
@@ -46,7 +37,7 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 /*
  * TODO, EVERYTHING..
  */
-@SuppressWarnings({ "rawtypes", "deprecation" })
+@SuppressWarnings({ "rawtypes" })
 public class RegisterNewSeedSql extends AbstractProfileAction {
 
 	/** Class logger. */
@@ -125,8 +116,8 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
 		log.debug("Entering GenerateNewToken doPreExecute");
 
 		try {
-			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(TokenUserContext.class, true);
+			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class).getSubcontext(TokenUserContext.class,
+					true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(UsernamePasswordContext.class);
 			return true;
@@ -149,7 +140,6 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
 			ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.NO_CREDENTIALS);
 			return;
 		}
-
 
 		String username = upCtx.getUsername();
 		String token = StringSupport.trimOrNull(request.getParameter(tokenCodeField));
@@ -183,10 +173,7 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
 		String querysql = "SELECT " + seedColumnName + " FROM " + seedDbTableName + " WHERE " + usernameColumnName + " = ?";
 		String existingSeed = null;
 		try {
-			existingSeed = jdbcTemplate.queryForObject(
-        		querysql,
-        		new Object[] { username },
-        		String.class);
+			existingSeed = jdbcTemplate.queryForObject(querysql, new Object[] { username }, String.class);
 		} catch (Exception e) {
 			log.error("existing seed not found");
 			existingSeed = null;
@@ -198,10 +185,9 @@ public class RegisterNewSeedSql extends AbstractProfileAction {
 		}
 
 		try {
-			String insertsql = "INSERT INTO " + seedDbTableName + " (" + usernameColumnName + ", " + seedColumnName + ") VALUES (?, ?)";
-			jdbcTemplate.update(
-        		insertsql,
-        		username, sharedSecret);
+			String insertsql = "INSERT INTO " + seedDbTableName + " (" + usernameColumnName + ", " + seedColumnName
+					+ ") VALUES (?, ?)";
+			jdbcTemplate.update(insertsql, username, sharedSecret);
 			return true;
 		} catch (Exception e) {
 			log.error("{} registerSeer error", getLogPrefix(), e);
