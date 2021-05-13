@@ -37,7 +37,7 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 /*
  * TODO, EVERYTHING..
  */
-@SuppressWarnings({ "rawtypes", "deprecation" })
+@SuppressWarnings({ "rawtypes" })
 public class RegisterNewSeedSql extends AbstractProfileAction {
 
 	/** Class logger. */
