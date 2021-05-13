@@ -11,9 +11,9 @@ dependencies {
   implementation group: 'net.shibboleth.idp', name: 'idp-attribute-resolver-spring', version:'3.4.8'
   implementation group: 'net.shibboleth.idp', name: 'idp-session-api', version:'3.4.8'
   implementation group: 'net.shibboleth.idp', name: 'idp-profile-api', version:'3.4.8'
-  implementation group: 'org.opensaml', name: 'opensaml-core', version:'3.2.0'
-  implementation group: 'org.opensaml', name: 'opensaml-profile-api', version:'3.2.0'
-  implementation group: 'org.opensaml', name: 'opensaml-soap-api', version:'3.2.0'
+  implementation group: 'org.opensaml', name: 'opensaml-core', version:'3.4.6'
+  implementation group: 'org.opensaml', name: 'opensaml-profile-api', version:'3.4.6'
+  implementation group: 'org.opensaml', name: 'opensaml-soap-api', version:'3.4.6'
   implementation group: 'com.google.code.gson', name: 'gson', version:'2.3.1'
   implementation group: 'com.warrenstrange', name: 'googleauth', version:'0.5.0'
   implementation group: 'org.springframework.ldap', name: 'spring-ldap-core', version:'2.0.4.RELEASE'
@@ -23,9 +23,9 @@ dependencies {
   testImplementation group: 'net.shibboleth.idp', name: 'idp-attribute-resolver-spring', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-saml-impl', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-core', version:'3.4.8'
-  testImplementation group: 'org.opensaml', name: 'opensaml-core', version:'3.2.0'
-  testImplementation group: 'org.opensaml', name: 'opensaml-profile-api', version:'3.2.0'
-  testImplementation group: 'org.opensaml', name: 'opensaml-security-impl', version:'3.2.0'
+  testImplementation group: 'org.opensaml', name: 'opensaml-core', version:'3.4.6'
+  testImplementation group: 'org.opensaml', name: 'opensaml-profile-api', version:'3.4.6'
+  testImplementation group: 'org.opensaml', name: 'opensaml-security-impl', version:'3.4.6'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-profile-api', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-authn-api', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-authn-impl', version:'3.4.8'
@@ -37,7 +37,6 @@ dependencies {
   finaldeps group: 'org.springframework.ldap', name: 'spring-ldap-core', version:'2.0.4.RELEASE'
   finaldeps group: 'org.springframework.data', name: 'spring-data-mongodb', version:'1.8.1.RELEASE'
   finaldeps group: 'org.springframework.data', name: 'spring-data-commons', version: '1.11.1.RELEASE'
-  finaldeps group: 'org.mongodb', name: 'mongo-java-driver', version: '2.13.0'
 }
 
 task copyDeps(type: Copy) {
