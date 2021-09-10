@@ -80,6 +80,7 @@ public class CheckForSeed extends AbstractProfileAction {
 			}
 		} catch (Exception e) {
 			log.error("Error with doExecute", e);
+			e.printStackTrace();
 		}
 	}
 }
