@@ -66,6 +66,7 @@ public class CheckForSeed extends AbstractProfileAction {
 		log.debug("Entering CheckForSeed doExecute");
 
 		try {
+			log.debug("About to perform doExecute.");
 			String username = upCtx.getUsername();
 			seedFetcher.getSeed(username, tokenUserCtx);
 			if (tokenUserCtx.getState() != AuthState.OK) {
