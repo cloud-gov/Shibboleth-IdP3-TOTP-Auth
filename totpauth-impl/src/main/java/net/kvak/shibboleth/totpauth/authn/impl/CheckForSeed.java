@@ -71,6 +71,9 @@ public class CheckForSeed extends AbstractProfileAction {
 					.getSubcontext(UsernamePasswordContext.class);
 
 			String username = upCtx.getUsername();
+			log.debug("upCtx = {}", upCtx);
+			log.debug("Username = {}", username);
+			log.debug("tockenUserCtx = {}", tokenUserCtx);
 			seedFetcher.getSeed(username, tokenUserCtx);
 			if (tokenUserCtx.getState() != AuthState.OK) {
 				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
