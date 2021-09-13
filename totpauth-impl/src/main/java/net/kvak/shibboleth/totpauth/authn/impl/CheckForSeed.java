@@ -51,11 +51,9 @@ public class CheckForSeed extends AbstractProfileAction {
 			tokenUserCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(UsernamePasswordContext.class);
+					.getSubcontext(UsernamePasswordContext.class, true);
 
-			log.debug("profileRequestContext = {}", profileRequestContext);
 			log.debug("upCtx = {}", upCtx);
-			log.debug("tokenUserCtx = {}", tokenUserCtx);
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
@@ -72,10 +70,6 @@ public class CheckForSeed extends AbstractProfileAction {
 		try {
 			log.debug("About to perform doExecute.");
 			log.debug("profileRequestContext = {}", profileRequestContext);
-			log.debug("upCtx = {}", upCtx);
-			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(UsernamePasswordContext.class);
-
 			log.debug("upCtx = {}", upCtx);
 
 			String username = upCtx.getUsername();
