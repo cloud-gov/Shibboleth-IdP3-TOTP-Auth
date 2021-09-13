@@ -69,8 +69,10 @@ public class CheckForSeed extends AbstractProfileAction {
 			log.debug("About to perform doExecute.");
 			log.debug("profileRequestContext = {}", profileRequestContext);
 			log.debug("upCtx = {}", upCtx);
-			//upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-			//		.getSubcontext(UsernamePasswordContext.class);
+			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
+					.getSubcontext(UsernamePasswordContext.class);
+
+			log.debug("upCtx = {}", upCtx);
 
 			String username = upCtx.getUsername();
 			//log.debug("upCtx = {}", upCtx);
