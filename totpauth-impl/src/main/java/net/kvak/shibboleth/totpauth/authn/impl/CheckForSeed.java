@@ -48,6 +48,11 @@ public class CheckForSeed extends AbstractProfileAction {
 		log.debug("Entering CheckForSeed doPreExecute");
 
 		try {
+			log.debug("profileRequestContext = {}", profileRequestContext);
+			log.debug("AuthenticationContext.class = {}", AuthenticationContext.class);
+			log.debug("TokenUserContext.class = {}", TokenUserContext.class);
+			log.debug("UsernamePasswordContext.class = {}", UsernamePasswordContext.class);
+
 			tokenUserCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
