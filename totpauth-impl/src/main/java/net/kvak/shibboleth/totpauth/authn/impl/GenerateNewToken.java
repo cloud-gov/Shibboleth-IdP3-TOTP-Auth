@@ -61,7 +61,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(UsernamePasswordContext.class);
+					.getSubcontext(UsernamePasswordContext.class, true);
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
