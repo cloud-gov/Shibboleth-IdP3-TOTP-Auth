@@ -63,6 +63,7 @@ public class CheckForSeed extends AbstractProfileAction {
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
+			e.printStackTrace();
 			return false;
 
 		}

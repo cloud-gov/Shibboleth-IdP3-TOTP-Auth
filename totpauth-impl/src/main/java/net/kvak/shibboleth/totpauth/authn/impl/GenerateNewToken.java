@@ -65,6 +65,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
+			e.printStackTrace();
 			return false;
 
 		}
@@ -80,6 +81,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 			generateToken();
 		} catch (Exception e) {
 			log.error("Failed to create new token", e);
+			e.printStackTrace();
 		}
 
 	}
@@ -100,7 +102,8 @@ public class GenerateNewToken extends AbstractProfileAction {
 			tokenCtx.setSharedSecret(sharedSecret);
 
 		} catch (Exception e) {
-			log.error("Error generating new token",e);
+			log.error("Error generating new token", e);
+			e.printStackTrace();
 		}
 
 
