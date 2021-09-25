@@ -1,5 +1,7 @@
 package net.kvak.shibboleth.totpauth.authn.impl;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import javax.annotation.Nonnull;
 
 import org.opensaml.profile.context.ProfileRequestContext;
