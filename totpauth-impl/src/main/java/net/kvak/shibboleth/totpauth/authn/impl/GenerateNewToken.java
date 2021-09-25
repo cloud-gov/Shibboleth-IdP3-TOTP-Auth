@@ -1,6 +1,7 @@
 package net.kvak.shibboleth.totpauth.authn.impl;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.annotation.Nonnull;
 
@@ -65,7 +66,9 @@ public class GenerateNewToken extends AbstractProfileAction {
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(UsernamePasswordContext.class, true);
 
-			log.debug("upCtx contents = {}", ReflectionToStringBuilder.toString(upCtx));
+			log.debug("upCtx contents = {}", ReflectionToStringBuilder.toString(
+				upCtx, ToStringStyle.MULTI_LINE_STYLE, true, true)
+			);
 
 			return true;
 		} catch (Exception e) {
