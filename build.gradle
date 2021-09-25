@@ -33,6 +33,7 @@ subprojects {
     implementation group: 'org.springframework', name: 'spring-jdbc', version: '4.2.3.RELEASE'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'javax.servlet:javax.servlet-api:3.0.1'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     testImplementation group: 'org.springframework', name: 'spring-test', version:'4.2.3.RELEASE'
     testImplementation group: 'net.shibboleth.utilities', name: 'java-support', version:'7.2.0'
     testImplementation group: 'org.testng', name: 'testng', version:'6.9.9'
