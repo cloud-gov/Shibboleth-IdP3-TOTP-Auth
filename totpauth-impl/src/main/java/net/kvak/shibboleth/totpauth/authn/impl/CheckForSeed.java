@@ -2,6 +2,9 @@ package net.kvak.shibboleth.totpauth.authn.impl;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
@@ -60,6 +63,14 @@ public class CheckForSeed extends AbstractProfileAction {
 
 			log.debug("tokenUserCtx = {}", tokenUserCtx);
 			log.debug("upCtx = {}", upCtx);
+
+			log.debug("tokenUserCtx contents = {}", ReflectionToStringBuilder.toString(
+				upCtx, ToStringStyle.MULTI_LINE_STYLE, true, true)
+			);
+
+			log.debug("upCtx contents = {}", ReflectionToStringBuilder.toString(
+				upCtx, ToStringStyle.MULTI_LINE_STYLE, true, true)
+			);
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
