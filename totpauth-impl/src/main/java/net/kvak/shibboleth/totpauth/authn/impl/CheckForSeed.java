@@ -2,9 +2,6 @@ package net.kvak.shibboleth.totpauth.authn.impl;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
@@ -54,23 +51,15 @@ public class CheckForSeed extends AbstractProfileAction {
 			log.debug("profileRequestContext = {}", profileRequestContext);
 			log.debug("AuthenticationContext.class = {}", AuthenticationContext.class);
 			log.debug("TokenUserContext.class = {}", TokenUserContext.class);
-			log.debug("UsernamePasswordContext.class = {}", UsernamePasswordContext.class);
+			//log.debug("UsernamePasswordContext.class = {}", UsernamePasswordContext.class);
 
 			tokenUserCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
-			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(UsernamePasswordContext.class);
+			//upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
+			//		.getSubcontext(UsernamePasswordContext.class);
 
 			log.debug("tokenUserCtx = {}", tokenUserCtx);
-			log.debug("upCtx = {}", upCtx);
-
-			log.debug("tokenUserCtx contents = {}", ReflectionToStringBuilder.toString(
-				upCtx, ToStringStyle.MULTI_LINE_STYLE, true, true)
-			);
-
-			log.debug("upCtx contents = {}", ReflectionToStringBuilder.toString(
-				upCtx, ToStringStyle.MULTI_LINE_STYLE, true, true)
-			);
+			//log.debug("upCtx = {}", upCtx);
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
@@ -89,9 +78,10 @@ public class CheckForSeed extends AbstractProfileAction {
 			log.debug("About to perform doExecute.");
 			log.debug("profileRequestContext = {}", profileRequestContext);
 			log.debug("tokenUserCtx = {}", tokenUserCtx);
-			log.debug("upCtx = {}", upCtx);
+			//log.debug("upCtx = {}", upCtx);
 
-			String username = upCtx.getUsername();
+			//String username = upCtx.getUsername();
+			String username = tokenUserCtx.getUsername();
 			log.debug("Username = {}", username);
 			seedFetcher.getSeed(username, tokenUserCtx);
 			if (tokenUserCtx.getState() != AuthState.OK) {
