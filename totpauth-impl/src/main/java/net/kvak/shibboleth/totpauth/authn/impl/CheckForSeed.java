@@ -56,7 +56,7 @@ public class CheckForSeed extends AbstractProfileAction {
 			tokenUserCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-					.getSubcontext(UsernamePasswordContext.class, true);
+					.getSubcontext(UsernamePasswordContext.class);
 
 			log.debug("tokenUserCtx = {}", tokenUserCtx);
 			log.debug("upCtx = {}", upCtx);
