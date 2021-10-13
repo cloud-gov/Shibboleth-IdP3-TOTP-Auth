@@ -60,8 +60,8 @@ public class GenerateNewToken extends AbstractProfileAction {
 		try {
 			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
-			//upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
-			//		.getSubcontext(UsernamePasswordContext.class, true);
+			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
+					.getSubcontext(UsernamePasswordContext.class, true);
 
 			return true;
 		} catch (Exception e) {
@@ -78,8 +78,7 @@ public class GenerateNewToken extends AbstractProfileAction {
     	log.debug("Entering GenerateNewToken doExecute");
 
 		try {
-			//log.debug("Trying to create new token for {}", upCtx.getUsername());
-			log.debug("Trying to create new token for {}", tokenCtx.getUsername());
+			log.debug("Trying to create new token for {}", upCtx.getUsername());
 			generateToken();
 		} catch (Exception e) {
 			log.error("Failed to create new token", e);
@@ -89,22 +88,19 @@ public class GenerateNewToken extends AbstractProfileAction {
 	}
 
 	private void generateToken() {
-		//log.debug("upCtx = {}", upCtx);
-		//log.debug("Generating new token shared secret and URL for {}", upCtx.getUsername());
+		log.debug("upCtx = {}", upCtx);
+		log.debug("Generating new token shared secret and URL for {}", upCtx.getUsername());
 		log.debug("Generating new token shared secret and URL for {}", tokenCtx.getUsername());
 
 		try {
 			final GoogleAuthenticatorKey key = gAuth.createCredentials();
 
-			//String totpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(gAuthIssuerName, upCtx.getUsername(), key);
-			String totpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(gAuthIssuerName, tokenCtx.getUsername(), key);
-			//log.debug("Totp URL for {} is {}", upCtx.getUsername(), totpUrl);
-			log.debug("Totp URL for {} is {}", tokenCtx.getUsername(), totpUrl);
+			String totpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(gAuthIssuerName, upCtx.getUsername(), key);
+			log.debug("Totp URL for {} is {}", upCtx.getUsername(), totpUrl);
 			tokenCtx.setTotpUrl(totpUrl);
 
 			String sharedSecret = StringSupport.trimOrNull(key.getKey());
-			//log.debug("Shared secret for {} is {}", upCtx.getUsername(), sharedSecret);
-			log.debug("Shared secret for {} is {}", tokenCtx.getUsername(), sharedSecret);
+			log.debug("Shared secret for {} is {}", upCtx.getUsername(), sharedSecret);
 			tokenCtx.setSharedSecret(sharedSecret);
 
 		} catch (Exception e) {
