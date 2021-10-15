@@ -86,6 +86,8 @@ public class GenerateNewToken extends AbstractProfileAction {
 	}
 
 	private void generateToken() {
+		log.debug("Generating new token shared secret and URL for {}", upCtx.getUsername());
+
 		try {
 			final GoogleAuthenticatorKey key = gAuth.createCredentials();
 
