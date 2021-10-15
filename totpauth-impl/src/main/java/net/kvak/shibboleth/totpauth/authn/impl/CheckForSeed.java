@@ -52,6 +52,7 @@ public class CheckForSeed extends AbstractProfileAction {
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(UsernamePasswordContext.class);
+
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
@@ -65,11 +66,15 @@ public class CheckForSeed extends AbstractProfileAction {
 	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext) {
 		log.debug("Entering CheckForSeed doExecute");
 
-		String username = upCtx.getUsername();
-		seedFetcher.getSeed(username, tokenUserCtx);
-		if (tokenUserCtx.getState() != AuthState.OK) {
-			ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
-		}
+		try {
+			String username = upCtx.getUsername();
+			seedFetcher.getSeed(username, tokenUserCtx);
 
+			if (tokenUserCtx.getState() != AuthState.OK) {
+				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
+			}
+		} catch (Exception e) {
+			log.error("Error with doExecute", e);
+		}
 	}
 }

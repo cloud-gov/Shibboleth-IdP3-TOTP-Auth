@@ -71,7 +71,5 @@ public class SQLSeedFetcher implements SeedFetcher {
 			tokenUserCtx.setState(AuthState.MISSING_SEED);
 			log.error("Error accessing seed datasource", e);
 		}
-
 	}
-
 }

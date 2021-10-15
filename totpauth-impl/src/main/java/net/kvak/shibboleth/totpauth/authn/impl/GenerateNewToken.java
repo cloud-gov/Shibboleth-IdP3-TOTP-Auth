@@ -62,6 +62,7 @@ public class GenerateNewToken extends AbstractProfileAction {
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(UsernamePasswordContext.class);
+
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
@@ -91,15 +92,12 @@ public class GenerateNewToken extends AbstractProfileAction {
 			final GoogleAuthenticatorKey key = gAuth.createCredentials();
 
 			String totpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(gAuthIssuerName, upCtx.getUsername(), key);
-			log.debug("Totp URL for {} is {}", upCtx.getUsername(), totpUrl);
 			tokenCtx.setTotpUrl(totpUrl);
 
 			String sharedSecret = StringSupport.trimOrNull(key.getKey());
-			log.debug("Shared secret for {} is {}", upCtx.getUsername(), sharedSecret);
 			tokenCtx.setSharedSecret(sharedSecret);
-
 		} catch (Exception e) {
-			log.error("Error generating new token",e);
+			log.error("Error generating new token", e);
 		}
 
 
