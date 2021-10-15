@@ -215,7 +215,5 @@ public class RegisterNewToken extends AbstractProfileAction {
 		}
 
 		return dn;
-
 	}
-
 }

@@ -48,22 +48,14 @@ public class CheckForSeed extends AbstractProfileAction {
 		log.debug("Entering CheckForSeed doPreExecute");
 
 		try {
-			log.debug("profileRequestContext = {}", profileRequestContext);
-			log.debug("AuthenticationContext.class = {}", AuthenticationContext.class);
-			log.debug("TokenUserContext.class = {}", TokenUserContext.class);
-			log.debug("UsernamePasswordContext.class = {}", UsernamePasswordContext.class);
-
 			tokenUserCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenUserContext.class, true);
 			upCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(UsernamePasswordContext.class);
 
-			log.debug("tokenUserCtx = {}", tokenUserCtx);
-			log.debug("upCtx = {}", upCtx);
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
-			e.printStackTrace();
 			return false;
 
 		}
@@ -75,21 +67,14 @@ public class CheckForSeed extends AbstractProfileAction {
 		log.debug("Entering CheckForSeed doExecute");
 
 		try {
-			log.debug("About to perform doExecute.");
-			log.debug("profileRequestContext = {}", profileRequestContext);
-			log.debug("tokenUserCtx = {}", tokenUserCtx);
-			log.debug("upCtx = {}", upCtx);
-
 			String username = upCtx.getUsername();
-			//String username = tokenUserCtx.getUsername();
-			log.debug("Username = {}", username);
 			seedFetcher.getSeed(username, tokenUserCtx);
+
 			if (tokenUserCtx.getState() != AuthState.OK) {
 				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
 			}
 		} catch (Exception e) {
 			log.error("Error with doExecute", e);
-			e.printStackTrace();
 		}
 	}
 }

@@ -66,7 +66,6 @@ public class GenerateNewToken extends AbstractProfileAction {
 			return true;
 		} catch (Exception e) {
 			log.error("Error with doPreExecute", e);
-			e.printStackTrace();
 			return false;
 
 		}
@@ -82,30 +81,21 @@ public class GenerateNewToken extends AbstractProfileAction {
 			generateToken();
 		} catch (Exception e) {
 			log.error("Failed to create new token", e);
-			e.printStackTrace();
 		}
 
 	}
 
 	private void generateToken() {
-		log.debug("upCtx = {}", upCtx);
-		log.debug("Generating new token shared secret and URL for {}", upCtx.getUsername());
-		log.debug("Generating new token shared secret and URL for {}", tokenCtx.getUsername());
-
 		try {
 			final GoogleAuthenticatorKey key = gAuth.createCredentials();
 
 			String totpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL(gAuthIssuerName, upCtx.getUsername(), key);
-			log.debug("Totp URL for {} is {}", upCtx.getUsername(), totpUrl);
 			tokenCtx.setTotpUrl(totpUrl);
 
 			String sharedSecret = StringSupport.trimOrNull(key.getKey());
-			log.debug("Shared secret for {} is {}", upCtx.getUsername(), sharedSecret);
 			tokenCtx.setSharedSecret(sharedSecret);
-
 		} catch (Exception e) {
 			log.error("Error generating new token", e);
-			e.printStackTrace();
 		}
 
 
