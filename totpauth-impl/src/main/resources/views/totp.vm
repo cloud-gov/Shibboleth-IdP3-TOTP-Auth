@@ -31,8 +31,8 @@ p.error {
           #parse("login-error.vm")
 
 
-           <form action="$flowExecutionUrl" method="post">
-
+          <form action="$flowExecutionUrl" method="post">
+            #parse("csrf/csrf.vm")
             <div class="form-element-wrapper">
               <label for="tokenNumber">Temporary token code from your authentication app (for most people this is the Google Authenticator app you installed on your mobile phone during account creation)</label>
               <input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text" autofocus>
