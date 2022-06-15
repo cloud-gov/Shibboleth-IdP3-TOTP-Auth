@@ -88,7 +88,7 @@ public class ExtractTokenFromForm extends AbstractExtractionAction {
 			}
 
 		} catch (Exception e) {
-			log.warn("{} Login by {} produced exception", getLogPrefix(),  e);
+			log.error("{} Login by {} produced exception", getLogPrefix(),  e);
 		}
 	}
 

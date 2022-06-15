@@ -1,12 +1,6 @@
 package net.kvak.shibboleth.totpauth.authn.impl;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.ModificationItem;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.base.Strings;
@@ -17,14 +11,11 @@ import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.ldap.core.DistinguishedName;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.AbstractContextMapper;
-import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext;
 import net.kvak.shibboleth.totpauth.api.authn.context.TokenUserContext.AuthState;
+import net.kvak.shibboleth.totpauth.authn.impl.TotpUtils;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.UsernamePasswordContext;
@@ -35,11 +26,11 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 
 /**
  * Validates users TOTP token code against injected authenticator
- * 
+ *
  * An action that checks for a {@link TokenCodeContext} and directly produces an
  * {@link net.shibboleth.idp.authn.AuthenticationResult} based on submitted
  * tokencode and username
- * 
+ *
  * @author korteke
  *
  */
@@ -47,8 +38,8 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 /*
  * TODO, EVERYTHING..
  */
-@SuppressWarnings({ "rawtypes", "deprecation" })
-public class RegisterNewToken extends AbstractProfileAction {
+@SuppressWarnings({ "rawtypes" })
+public class RegisterNewSeedSql extends AbstractProfileAction {
 
 	/** Class logger. */
 	@Nonnull
@@ -60,23 +51,30 @@ public class RegisterNewToken extends AbstractProfileAction {
 	@NotEmpty
 	private GoogleAuthenticator gAuth;
 
-	/** LdapTemplate **/
-	private LdapTemplate ldapTemplate;
+	/** JdbcTemplate **/
+	@Nonnull
+	@NotEmpty
+	private JdbcTemplate jdbcTemplate;
 
 	/** TokenCodeField that is on RegisterToken form **/
 	@Nonnull
 	@NotEmpty
 	private String tokenCodeField;
 
-	/** User attribute in LDAP (ex. uid) **/
+	/** Name of the table in the seed db **/
 	@Nonnull
 	@NotEmpty
-	private String userAttribute;
+	private String seedDbTableName;
 
-	/** seedToken attribute in LDAP */
+	/** Name of the username column in the seed db **/
 	@Nonnull
 	@NotEmpty
-	private String seedAttribute;
+	private String usernameColumnName;
+
+	/** Name of the seed column in the seed db **/
+	@Nonnull
+	@NotEmpty
+	private String seedColumnName;
 
 	/** Username context for username **/
 	@Nonnull
@@ -88,9 +86,9 @@ public class RegisterNewToken extends AbstractProfileAction {
 	@NotEmpty
 	private TokenUserContext tokenCtx;
 
-	/** Inject ldapTemplate */
-	public void setLdapTemplate(LdapTemplate ldapTemplate) {
-		this.ldapTemplate = ldapTemplate;
+	/** Inject seedDataSource */
+	public void setjdbcTemplate(@Nonnull @NotEmpty final JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	/** Inject token authenticator */
@@ -101,10 +99,11 @@ public class RegisterNewToken extends AbstractProfileAction {
 	/**
 	 * Constructor Initialize user and seed attributes
 	 */
-	public RegisterNewToken(String seedAttribute, String userAttribute) {
-		log.debug("Construct RegisterNewToken with {} - {}", seedAttribute, userAttribute);
-		this.userAttribute = userAttribute;
-		this.seedAttribute = seedAttribute;
+	public RegisterNewSeedSql(String seedDbTableName, String usernameColumnName, String seedColumnName) {
+		log.debug("Construct RegisterNewSeedSql with {} - {} - {}", seedDbTableName, usernameColumnName, seedColumnName);
+		this.seedDbTableName = seedDbTableName;
+		this.usernameColumnName = usernameColumnName;
+		this.seedColumnName = seedColumnName;
 	}
 
 	public void settokenCodeField(@Nonnull @NotEmpty final String fieldName) {
@@ -132,17 +131,18 @@ public class RegisterNewToken extends AbstractProfileAction {
 	}
 
 	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext) {
-		log.debug("{} Entering RegisterNewToken", getLogPrefix());
+		log.debug("{} Entering RegisterNewSeedSql", getLogPrefix());
 
 		final HttpServletRequest request = getHttpServletRequest();
 		final TotpUtils totpUtils = new TotpUtils();
 
 		if (request == null) {
-			log.error("{} Empty request", getLogPrefix());
+			log.debug("{} Empty request", getLogPrefix());
 			ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.NO_CREDENTIALS);
 			return;
 		}
 
+		String username = upCtx.getUsername();
 		String token = StringSupport.trimOrNull(request.getParameter(tokenCodeField));
 
 		if (!StringUtils.isNumeric(token) || Strings.isNullOrEmpty(token)) {
@@ -155,65 +155,45 @@ public class RegisterNewToken extends AbstractProfileAction {
 		} else {
 			boolean tokenValidate = totpUtils.validateToken(tokenCtx.getSharedSecret(), Integer.parseInt(token));
 			if (tokenValidate) {
-
-				String dn = fetchDn(upCtx.getUsername());
-
-				if (!Strings.isNullOrEmpty(dn)) {
-					log.debug("{} User {} DN is {}", getLogPrefix(), upCtx.getUsername(), dn);
-					boolean result = registerToken(dn, tokenCtx.getSharedSecret());
-
-					if (!result) {
-						ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.ACCOUNT_ERROR);
-					}
-				} else {
-					log.debug("Invalid token. Returning.");
-					tokenCtx.setState(AuthState.CANT_VALIDATE);
-					ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
+				boolean result = registerSeed(username, tokenCtx.getSharedSecret());
+				if (!result) {
+					ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.ACCOUNT_ERROR);
 				}
+			} else {
+				log.debug("Invalid token. Returning.");
+				tokenCtx.setState(AuthState.CANT_VALIDATE);
+				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
 			}
-
 		}
 	}
 
-	private boolean registerToken(String dn, String sharedSecret) {
+	private boolean registerSeed(String username, String sharedSecret) {
 
-		log.debug("Entering registerToken");
+		/** Make sure there isn't already a seed for this user **/
 
+		String querysql = "SELECT " + seedColumnName + " FROM " + seedDbTableName + " WHERE " + usernameColumnName + " = ?";
+		String existingSeed = null;
 		try {
-			Attribute attr = new BasicAttribute(seedAttribute, sharedSecret);
-			log.debug("Created new BasicAttribute [{} - {}]", attr.getID(), attr.get(0));
-			ModificationItem item = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
-			log.debug("{} Trying to write the changes to the LDAP", getLogPrefix());
-			ldapTemplate.modifyAttributes(dn, new ModificationItem[] { item });
-			return true;
+			existingSeed = jdbcTemplate.queryForObject(querysql, new Object[] { username }, String.class);
 		} catch (Exception e) {
-			log.error("{} registerToken error", getLogPrefix(), e);
+			log.error("existing seed not found");
+			existingSeed = null;
+		}
+
+		if (!Strings.isNullOrEmpty(existingSeed)) {
+			log.debug("{} found existing seed. Aborting register new seed", getLogPrefix());
 			return false;
 		}
 
-	}
-
-	@SuppressWarnings("unchecked")
-	private String fetchDn(String username) {
-
-		String dn = "";
-		EqualsFilter f = new EqualsFilter(userAttribute, username);
-		log.debug("{} Trying to find user {} dn from ldap with filter {}", getLogPrefix(), username, f.encode());
-
-		List result = ldapTemplate.search(DistinguishedName.EMPTY_PATH, f.toString(), new AbstractContextMapper() {
-			protected Object doMapFromContext(DirContextOperations ctx) {
-				return ctx.getDn().toString();
-			}
-		});
-
-		if (result.size() == 1) {
-			log.debug("{} User {} relative DN is: {}", getLogPrefix(), username, (String) result.get(0));
-			dn = (String) result.get(0);
-		} else {
-			log.debug("{} User not found or not unique. DN size: {}", getLogPrefix(), result.size());
-			throw new RuntimeException("User not found or not unique");
+		try {
+			String insertsql = "INSERT INTO " + seedDbTableName + " (" + usernameColumnName + ", " + seedColumnName
+					+ ") VALUES (?, ?)";
+			jdbcTemplate.update(insertsql, username, sharedSecret);
+			return true;
+		} catch (Exception e) {
+			log.error("{} registerSeer error", getLogPrefix(), e);
+			return false;
 		}
 
-		return dn;
 	}
 }

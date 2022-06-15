@@ -35,7 +35,7 @@ public class TokenUserContext extends BaseContext {
 	  if (this.getState() == AuthState.REGISTER) {
 		  return "You have to register at least one valid token";
 	  } else if (this.getState() == AuthState.CANT_VALIDATE) {
-		  return "Invalid Token Code. Try again.";
+		  return "Invalid token code. Check to make sure your mobile device has the correct local timezone and time, and try again.";
 	  }
 	return "";
 }

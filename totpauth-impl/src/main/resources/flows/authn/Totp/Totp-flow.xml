@@ -6,7 +6,7 @@
 	<!-- First call UserName & Password flow -->
 	<subflow-state id="CallPasswordFlow" subflow="authn/Password">
 		<input name="calledAsSubflow" value="true" />
-		<transition on="proceed" to="DisplayTotpForm" />
+		<transition on="proceed" to="CheckForSeed" />
 	</subflow-state>
 
 	<!-- Display Token form -->
@@ -31,7 +31,6 @@
 
 	<view-state id="RegisterToken" view="totp-register">
 		<on-render>
-			<evaluate expression="GenerateNewToken" /> <!-- Generate new token -->
 			<evaluate expression="environment" result="viewScope.environment" />
 			<evaluate expression="opensamlProfileRequestContext" result="viewScope.profileRequestContext" />
 			<evaluate expression="opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationContext))"
@@ -49,12 +48,27 @@
 
 	</view-state>
 
+	<action-state id="CheckForSeed">
+		<evaluate expression="CheckForSeed" />
+		<evaluate expression="'proceed'" />
+
+		<transition on="InvalidCredentials" to="GenerateTokenSecrets" />
+		<transition on="proceed" to="DisplayTotpForm" />
+	</action-state>
+
 	<action-state id="ExtractTotpFromForm">
 		<evaluate expression="ExtractTotpFromForm" />
 		<evaluate expression="'proceed'" />
 
 		<transition on="InvalidCredentials" to="DisplayTotpForm" />
 		<transition on="proceed" to="TotpTokenValidator" />
+	</action-state>
+
+	<action-state id="GenerateTokenSecrets">
+		<evaluate expression="GenerateNewToken" />
+		<evaluate expression="'proceed'" />
+
+		<transition on="proceed" to="RegisterToken" />
 	</action-state>
 
 	<action-state id="TotpTokenValidator">

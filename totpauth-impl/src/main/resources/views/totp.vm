@@ -31,19 +31,17 @@ p.error {
           #parse("login-error.vm")
 
 
-           <form action="$flowExecutionUrl" method="post">
-
+          <form action="$flowExecutionUrl" method="post">
+            #parse("csrf/csrf.vm")
             <div class="form-element-wrapper">
-              <label for="tokenNumber">Token code</label>
-              <input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text">
+              <label for="tokenNumber">Temporary token code from your authentication app (for most people this is the Google Authenticator app you installed on your mobile phone during account creation)</label>
+              <input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text" autofocus>
             </div>
 
             <div class="form-element-wrapper">
               <button class="form-element form-button" type="submit" name="_eventId_proceed"
               >#springMessageText("idp.login.login", "Login")</button>
-
-              <br><br><button type="submit" name="registerToken" formaction="$flowExecutionUrl&_eventId=RegisterToken">Register a new Token</button>
-
+              <input type="hidden" name="state" value="$state" />
             </div>
           </form>
         </div>

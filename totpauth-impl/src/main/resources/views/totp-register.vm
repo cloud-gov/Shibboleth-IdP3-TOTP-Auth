@@ -31,14 +31,16 @@ p.error {
           #parse("login-error.vm")
 
           #if( "$errorMessage" != "")
+          
           <p><h3><strong><center>Register a new Token</center></strong></h3></p><br>
-	  <p class="error")>$errorMessage</p><br>
+	      <p class="error")>$errorMessage</p><br>
+          
           #end
           <form action="$flowExecutionUrl" method="post">
-
-            <li> Download the Google Authenticator to your mobile phone </li>
-            <li> Open the app and scan the QR-code or manually enter code: <strong>$sharedSecret</strong></li>
-            <li> Enter presented Token Code to the box below the QR-Code and click <b>Register</b></li>
+            #parse("csrf/csrf.vm")
+            <li> Download the Google Authenticator app to your mobile device </li>
+            <li> Open the app and scan the barcode image below or manually enter this key: <strong>$sharedSecret</strong></li>
+            <li> The app will generate a token code for you. Enter the generated token code in the box below the barcode image and click <b>Register</b></li>
             <br>
             <div class="form-element-wrapper">
                <center><img src="$totpUrl" height="166" width="166"></center>
@@ -46,7 +48,7 @@ p.error {
 
             <div class="form-element-wrapper">
               <label for="tokenNumber">Token code</label>
-              <input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text">
+              <input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text" autofocus>
             </div>
 
 
