@@ -54,7 +54,6 @@ p.error {
 
             <div class="form-element-wrapper">
               <button class="form-element form-button" type="submit" name="_eventId_proceed"
-              onClick="this.childNodes[0].nodeValue='#springMessageText("idp.token.register", "Registering token, please wait...")'"
               >Register</button>
             </div>
           </form>
