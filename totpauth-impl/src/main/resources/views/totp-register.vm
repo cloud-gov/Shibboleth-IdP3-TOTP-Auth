@@ -61,7 +61,7 @@ p.error {
           <li><a href="https://support.google.com/accounts/answer/1066447" target="_blank">Google Authenticator installation instructions</a></li>
 <li><a href="https://support.authy.com/hc/en-us/articles/360006303934-Add-a-New-Two-Factor-Authentication-2FA-Account-Token-in-the-Authy-App" target="_blank">Authy Authenticator installation instructions</a></li>
 <li><a href="https://support.microsoft.com/en-us/account-billing/set-up-an-authenticator-app-as-a-two-step-verification-method-2db39828-15e1-4614-b825-6e2b524e7c95" target="_blank">Microsoft Authenticator installation instructions</a></li>
-<li><a href="https://support.lastpass.com/s/document-item?language=en_US&bundleId=lastpass&topicId=LastPass/enable-mfa.html&_LANG=enus" target="_blank">LastPass Authenticator installation instructions</a></li>
+<li><a href="https://support.lastpass.com/s/document-item?language=en_US&bundleId=lastpass&topicId=LastPass/create-totp-vault.html&_LANG=enus" target="_blank">LastPass Authenticator installation instructions</a></li>
 <li><a href="https://support.1password.com/one-time-passwords/"_blank">1Password Authenticator installation instructions</a></li>
 
 
