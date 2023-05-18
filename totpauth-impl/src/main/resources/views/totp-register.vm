@@ -38,7 +38,8 @@ p.error {
           #end
           <form action="$flowExecutionUrl" method="post">
             #parse("csrf/csrf.vm")
-            <li> Download the Google Authenticator app to your mobile device </li>
+            <li> Download an authenticator application or service to your mobile device that is compatible with RFC 6238. Any application or service which is compatible with RFC 6238 will work. Listed here are some cross device authenticators that are compatible with cloud.gov: Microsoft Authenticator, LastPass, 1password, Authy.
+ </li>
             <li> Open the app and scan the barcode image below or manually enter this key: <strong>$sharedSecret</strong></li>
             <li> The app will generate a token code for you. Enter the generated token code in the box below the barcode image and click <b>Register</b></li>
             <br>
@@ -58,6 +59,13 @@ p.error {
             </div>
           </form>
           <li><a href="https://support.google.com/accounts/answer/1066447" target="_blank">Google Authenticator installation instructions</a></li>
+<li><a href="https://support.authy.com/hc/en-us/articles/360006303934-Add-a-New-Two-Factor-Authentication-2FA-Account-Token-in-the-Authy-App" target="_blank">Authy Authenticator installation instructions</a></li>
+<li><a href="https://support.microsoft.com/en-us/account-billing/set-up-an-authenticator-app-as-a-two-step-verification-method-2db39828-15e1-4614-b825-6e2b524e7c95" target="_blank">Microsoft Authenticator installation instructions</a></li>
+<li><a href="https://support.lastpass.com/s/document-item?language=en_US&bundleId=lastpass&topicId=LastPass/create-totp-vault.html&_LANG=enus" target="_blank">LastPass Authenticator installation instructions</a></li>
+<li><a href="https://support.1password.com/one-time-passwords/"_blank">1Password Authenticator installation instructions</a></li>
+
+
+
 
         </div>
 
