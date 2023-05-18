@@ -38,7 +38,7 @@ p.error {
           #end
           <form action="$flowExecutionUrl" method="post">
             #parse("csrf/csrf.vm")
-            <li> Download an authenticator application or service to your mobile device that is compatible with RFC 6238. Any application or service which is compatible with RFC 6238 will work. Listed here are some cross device authenticators that are compatible with cloud.gov: Microsoft Authenticator, LastPass, Password Manager, 1password, Authy.
+            <li> Download an authenticator application or service to your mobile device that is compatible with RFC 6238. Any application or service which is compatible with RFC 6238 will work. Listed here are some cross device authenticators that are compatible with cloud.gov: Microsoft Authenticator, LastPass, 1password, Authy.
  </li>
             <li> Open the app and scan the barcode image below or manually enter this key: <strong>$sharedSecret</strong></li>
             <li> The app will generate a token code for you. Enter the generated token code in the box below the barcode image and click <b>Register</b></li>
