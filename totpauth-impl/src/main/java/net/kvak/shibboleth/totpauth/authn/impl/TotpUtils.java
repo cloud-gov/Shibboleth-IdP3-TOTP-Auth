@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.DirContextOperations;
@@ -19,6 +18,8 @@ import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 
 @SuppressWarnings("deprecation")
 public class TotpUtils {
+
+	private TotpSeedValidator totpSeedValidator;
 	
 	/** Class logger. */
 	@Nonnull
@@ -33,17 +34,11 @@ public class TotpUtils {
 
 	public TotpUtils() {
 		this.gAuth = new GoogleAuthenticator();
+		this.totpSeedValidator = new TotpSeedValidator();
 	}
-	
-	public boolean validateToken(String seed, int token) {
-		log.debug("Entering validatetoken");
 
-		if (seed.length() == 16 && StringUtils.isAlphanumeric(seed)) {
-			log.debug("Authorize {} - {} ", seed, token);
-			return gAuth.authorize(seed, token);
-		}
-		log.debug("Token code validation failed. Seed value is invalid");
-		return false;
+	public boolean validateToken(String seed, int token) {
+		return this.totpSeedValidator.validateToken(gAuth, seed, token);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
