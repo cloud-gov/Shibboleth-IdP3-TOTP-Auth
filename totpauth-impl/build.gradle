@@ -18,6 +18,7 @@ dependencies {
   implementation group: 'com.warrenstrange', name: 'googleauth', version:'1.5.0'
   implementation group: 'org.springframework.ldap', name: 'spring-ldap-core', version:'2.0.4.RELEASE'
   implementation group: 'org.springframework.data', name: 'spring-data-mongodb', version:'1.8.1.RELEASE'
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.11.0'
   testImplementation group: 'junit', name: 'junit', version:'3.8.1'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-attribute-resolver-impl', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-attribute-resolver-spring', version:'3.4.8'
@@ -30,6 +31,7 @@ dependencies {
   testImplementation group: 'net.shibboleth.idp', name: 'idp-authn-api', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-authn-impl', version:'3.4.8'
   testImplementation group: 'net.shibboleth.idp', name: 'idp-authn-impl', version:'3.4.8'
+
 
   finaldeps project(':totpauth-api')
   finaldeps group: 'com.warrenstrange', name: 'googleauth', version:'1.5.0'
