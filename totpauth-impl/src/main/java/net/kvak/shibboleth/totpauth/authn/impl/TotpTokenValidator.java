@@ -92,7 +92,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 
 			if (tokenCtx.getState() == AuthState.OK) {
 				log.debug("{} Validating user token against seed", getLogPrefix());
-				
+
 				/* Get seeds from tokenUserContext */
 				ArrayList<String> seeds = tokenCtx.getTokenSeed();
 
@@ -108,7 +108,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 					}
 				}
 			}
-			
+
 			if (tokenCtx.getState() == AuthState.REGISTER) {
 				log.info("{} User: {} has not registered token", getLogPrefix(), upCtx.getUsername());
 				handleError(profileRequestContext, authenticationContext, "RegisterToken",
@@ -147,5 +147,5 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 		return null;
 
 	}
-	
+
 }

@@ -25,11 +25,11 @@ public class TotpUtils {
 	@Nonnull
 	@NotEmpty
 	private final Logger log = LoggerFactory.getLogger(RegisterNewToken.class);
-	
+
 	GoogleAuthenticator gAuth;
-	
+
 	String userAttribute;
-	
+
 	LdapTemplate ldapTemplate;
 
 	public TotpUtils() {
@@ -40,7 +40,7 @@ public class TotpUtils {
 	public boolean validateToken(String seed, int token) {
 		return this.totpSeedValidator.validateToken(gAuth, seed, token);
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	private String fetchDn(String username) {
 
