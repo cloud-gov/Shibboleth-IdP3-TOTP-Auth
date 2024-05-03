@@ -26,11 +26,11 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 
 /**
  * Validates users TOTP token code against injected authenticator
- * 
+ *
  * An action that checks for a {@link TokenCodeContext} and directly produces an
  * {@link net.shibboleth.idp.authn.AuthenticationResult} based on submitted
  * tokencode and username
- * 
+ *
  * @author korteke
  *
  */
@@ -90,7 +90,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 
 			if (tokenCtx.getState() == AuthState.OK) {
 				log.debug("{} Validating user token against seed", getLogPrefix());
-				
+
 				/* Get seeds from tokenUserContext */
 				ArrayList<String> seeds = tokenCtx.getTokenSeed();
 
@@ -106,7 +106,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 					}
 				}
 			}
-			
+
 			if (tokenCtx.getState() == AuthState.REGISTER) {
 				log.info("{} User: {} has not registered token", getLogPrefix(), upCtx.getUsername());
 				handleError(profileRequestContext, authenticationContext, "RegisterToken",
@@ -134,7 +134,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 	public boolean validateToken(String seed, int token) {
 		log.debug("{} Entering validatetoken", getLogPrefix());
 
-		if (seed.length() == 16) {
+		if (seed.length() == 32) {
 			log.debug("{} authorize {} - {} ", getLogPrefix(), seed, token);
 			return gAuth.authorize(seed, token);
 		}
@@ -152,5 +152,5 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 		return null;
 
 	}
-	
+
 }
