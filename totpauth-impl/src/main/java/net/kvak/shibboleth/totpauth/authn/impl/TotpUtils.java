@@ -19,33 +19,33 @@ import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 
 @SuppressWarnings("deprecation")
 public class TotpUtils {
-	
+
 	/** Class logger. */
 	@Nonnull
 	@NotEmpty
 	private final Logger log = LoggerFactory.getLogger(RegisterNewToken.class);
-	
+
 	GoogleAuthenticator gAuth;
-	
+
 	String userAttribute;
-	
+
 	LdapTemplate ldapTemplate;
 
 	public TotpUtils() {
 		this.gAuth = new GoogleAuthenticator();
 	}
-	
+
 	public boolean validateToken(String seed, int token) {
 		log.debug("Entering validatetoken");
 
-		if (seed.length() == 16 && StringUtils.isAlphanumeric(seed)) {
+		if (seed.length() == 32 && StringUtils.isAlphanumeric(seed)) {
 			log.debug("Authorize {} - {} ", seed, token);
 			return gAuth.authorize(seed, token);
 		}
 		log.debug("Token code validation failed. Seed value is invalid");
 		return false;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	private String fetchDn(String username) {
 
