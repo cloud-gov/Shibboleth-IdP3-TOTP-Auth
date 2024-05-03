@@ -14,3 +14,4 @@ totpauth-impl/build/
 # Java
 .class
 .jar
+.java-version

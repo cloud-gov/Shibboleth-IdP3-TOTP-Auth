@@ -37,6 +37,8 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class TotpTokenValidator extends AbstractValidationAction implements TokenValidator {
 
+	private TotpSeedValidator totpSeedValidator;
+
 	/** Class logger. */
 	@Nonnull
 	@NotEmpty
@@ -72,7 +74,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 	/** Constructor **/
 	public TotpTokenValidator() {
 		super();
-
+		this.totpSeedValidator = new TotpSeedValidator();
 	}
 
 	@Override
@@ -132,14 +134,7 @@ public class TotpTokenValidator extends AbstractValidationAction implements Toke
 
 	@Override
 	public boolean validateToken(String seed, int token) {
-		log.debug("{} Entering validatetoken", getLogPrefix());
-
-		if (seed.length() == 32) {
-			log.debug("{} authorize {} - {} ", getLogPrefix(), seed, token);
-			return gAuth.authorize(seed, token);
-		}
-		log.debug("{} Token code validation failed. Seed is not 16 char long", getLogPrefix());
-		return false;
+		return this.totpSeedValidator.validateToken(gAuth, seed, token);
 	}
 
 	@Override
